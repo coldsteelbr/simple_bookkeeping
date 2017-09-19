@@ -44,6 +44,11 @@ public class MoneyFlowRecord {
         this.description = description;
     }
 
+    // Custom properties
+    public String getValueAsString(){
+        return value.toString();
+    }
+
     // Properties
     public long getId() {
         return id;
@@ -59,5 +64,13 @@ public class MoneyFlowRecord {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

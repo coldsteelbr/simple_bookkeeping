@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp"
+    android:orientation="vertical"
     tools:context="ru.romanbrazhnikov.simplebookkeeping.views.MainActivity">
 
     <!-- TITLE BALANCE -->
@@ -40,29 +40,18 @@
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="right">
+
         <Button
-            android:id="@+id/b_add_consumption"
+            android:id="@+id/b_new_flow"
             android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginRight="1dp"
-            android:background="#F44336"
-            android:textStyle="bold"
-            android:textSize="36sp"
-            android:textColor="@android:color/white"
-            android:text="-"/>
-        <Button
-            android:id="@+id/b_add_income"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="1dp"
+            android:layout_width="wrap_content"
             android:background="#4CAF50"
             android:textStyle="bold"
             android:textSize="36sp"
             android:textColor="@android:color/white"
-            android:text="+"/>
+            android:text="New"/>
     </LinearLayout>
 
 </LinearLayout>

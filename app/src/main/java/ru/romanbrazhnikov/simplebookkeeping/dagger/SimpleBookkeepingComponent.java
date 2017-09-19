@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import ru.romanbrazhnikov.simplebookkeeping.views.MainActivity;
+import ru.romanbrazhnikov.simplebookkeeping.views.MoneyFlowEditorActivity;
 
 /**
  * Created by roman on 19.09.17.
@@ -17,5 +18,5 @@ import ru.romanbrazhnikov.simplebookkeeping.views.MainActivity;
         })
 public interface SimpleBookkeepingComponent {
     void inject(MainActivity activity);
-    // void inject(NewActivity activity);
+    void inject(MoneyFlowEditorActivity activity);
 }
