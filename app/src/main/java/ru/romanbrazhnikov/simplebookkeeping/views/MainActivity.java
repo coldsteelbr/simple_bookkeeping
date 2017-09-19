@@ -81,23 +81,26 @@ public class MainActivity extends AppCompatActivity {
 
     class MoneyFlowViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
+        private long mId = 0;
         private TextView tvValue;
         private TextView tvDescription;
 
         public MoneyFlowViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             tvValue = itemView.findViewById(R.id.tv_value);
             tvDescription = itemView.findViewById(R.id.tv_description);
         }
 
         public void bindRecord(MoneyFlowRecord record) {
+            mId = record.getId();
             tvValue.setText(record.getValueAsString());
             tvDescription.setText(record.getDescription());
         }
 
         @Override
         public void onClick(View view) {
-
+            MoneyFlowEditorActivity.showActivity(MainActivity.this, mId);
         }
     }
 

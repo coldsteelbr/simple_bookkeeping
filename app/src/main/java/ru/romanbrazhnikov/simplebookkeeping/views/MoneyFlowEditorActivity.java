@@ -51,6 +51,10 @@ public class MoneyFlowEditorActivity extends AppCompatActivity {
         // Text fields
         etValue = findViewById(R.id.et_value);
         etDescription = findViewById(R.id.et_description);
+        if(mRecord != null){
+            etValue.setText(mRecord.getValueAsString());
+            etDescription.setText(mRecord.getDescription());
+        }
 
         // Buttons
         bSave = findViewById(R.id.b_save);
@@ -104,6 +108,7 @@ public class MoneyFlowEditorActivity extends AppCompatActivity {
             id = getIntent().getLongExtra(EXTRAS_ID, 0);
         }
 
+        // TODO: mRecord shouldn't be null
         if(id > 0){
             mRecord = mBox.get(id);
         }
