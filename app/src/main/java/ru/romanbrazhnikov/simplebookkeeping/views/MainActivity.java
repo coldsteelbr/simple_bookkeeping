@@ -1,7 +1,7 @@
 package ru.romanbrazhnikov.simplebookkeeping.views;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,14 +9,18 @@ import android.util.Log;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.objectbox.Box;
 import io.objectbox.BoxStore;
 import ru.romanbrazhnikov.simplebookkeeping.R;
+import ru.romanbrazhnikov.simplebookkeeping.dagger.MyApp;
 import ru.romanbrazhnikov.simplebookkeeping.entities.MoneyFlowRecord;
-import ru.romanbrazhnikov.simplebookkeeping.entities.MyObjectBox;
 
 public class MainActivity extends AppCompatActivity {
 
+    @Inject
+    BoxStore mBoxStore;
     private RecyclerView rvRecords;
 
     @Override
@@ -24,16 +28,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ((MyApp)getApplication()).getBookkeepingComponent().inject(this);
+
         rvRecords = findViewById(R.id.rv_records);
         rvRecords.setLayoutManager(new LinearLayoutManager(this));
 
-        BoxStore boxStore = MyObjectBox.builder().androidContext(this).build();
-        Box<MoneyFlowRecord> MFRBox = boxStore.boxFor(MoneyFlowRecord.class);
 
-        MoneyFlowRecord inRecord = new MoneyFlowRecord(new BigDecimal("777"), "Test income");
+        Box<MoneyFlowRecord> MFRBox = mBoxStore.boxFor(MoneyFlowRecord.class);
+
+        MoneyFlowRecord inRecord = new MoneyFlowRecord(new BigDecimal("333"), "Test income");
         MFRBox.put(inRecord);
 
-        MoneyFlowRecord outRecord = new MoneyFlowRecord(new BigDecimal("-354"), "Test consumption");
+        MoneyFlowRecord outRecord = new MoneyFlowRecord(new BigDecimal("-432"), "Test consumption");
         MFRBox.put(outRecord);
 
 
