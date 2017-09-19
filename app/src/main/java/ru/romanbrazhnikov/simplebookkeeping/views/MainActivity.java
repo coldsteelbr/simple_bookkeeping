@@ -1,6 +1,8 @@
 package ru.romanbrazhnikov.simplebookkeeping.views;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +83,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     class MoneyFlowViewHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
+            implements
+            View.OnClickListener,
+            View.OnLongClickListener
+    {
         private long mId = 0;
         private TextView tvValue;
         private TextView tvDescription;
@@ -88,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         public MoneyFlowViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             tvValue = itemView.findViewById(R.id.tv_value);
             tvDescription = itemView.findViewById(R.id.tv_description);
         }
@@ -102,6 +109,42 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             MoneyFlowEditorActivity.showActivity(MainActivity.this, mId);
         }
+
+        @Override
+        public boolean onLongClick(View view) {
+            // showing DeleteDialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setMessage("Delete the record?")
+                    .setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+
+            // don't call "onClick"
+            return true;
+        }
+
+        // Delete dialog listener
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //Yes button clicked
+                        Toast.makeText(MainActivity.this, "Deleting.", Toast.LENGTH_SHORT).show();
+                        // DELETING the note
+                        mMoneyFlowBox.remove(mId);
+                        // Refreshing UI
+                        updateUI();
+                        // Closing the dialog
+                        dialog.dismiss();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        // No clicked. Just closing the dialog
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
     }
 
     class MoneyFlowAdapter extends RecyclerView.Adapter<MoneyFlowViewHolder> {
