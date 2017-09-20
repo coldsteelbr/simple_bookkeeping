@@ -16,13 +16,11 @@ import android.widget.Toast;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 import javax.inject.Inject;
 
 import io.objectbox.Box;
 import io.objectbox.BoxStore;
-import io.objectbox.query.Query;
 import ru.romanbrazhnikov.simplebookkeeping.R;
 import ru.romanbrazhnikov.simplebookkeeping.dagger.MyApp;
 import ru.romanbrazhnikov.simplebookkeeping.entities.MoneyFlowRecord;
@@ -96,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
         BigDecimal balanceResult = BigDecimal.ZERO;
 
         // calculate the balance (sum)
-        for (MoneyFlowRecord currentRecord:
-             recordsForBalance) {
+        for (MoneyFlowRecord currentRecord :
+                recordsForBalance) {
             balanceResult = balanceResult.add(currentRecord.getValue());
         }
         tvBalance.setText(balanceResult.toString());
@@ -106,8 +104,7 @@ public class MainActivity extends AppCompatActivity {
     class MoneyFlowViewHolder extends RecyclerView.ViewHolder
             implements
             View.OnClickListener,
-            View.OnLongClickListener
-    {
+            View.OnLongClickListener {
         private long mId = 0;
         private TextView tvValue;
         private TextView tvDescription;
@@ -147,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (which){
+                switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         //Yes button clicked
                         Toast.makeText(MainActivity.this, "Deleting.", Toast.LENGTH_SHORT).show();

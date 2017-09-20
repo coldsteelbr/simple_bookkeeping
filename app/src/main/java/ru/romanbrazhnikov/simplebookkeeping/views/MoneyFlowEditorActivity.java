@@ -45,13 +45,14 @@ public class MoneyFlowEditorActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
-    /** Initializes Widgets & layouts & events
+    /**
+     * Initializes Widgets & layouts & events
      */
     private void initWidgets() {
         // Text fields
         etValue = findViewById(R.id.et_value);
         etDescription = findViewById(R.id.et_description);
-        if(mRecord != null){
+        if (mRecord != null) {
             etValue.setText(mRecord.getValueAsString());
             etDescription.setText(mRecord.getDescription());
         }
@@ -71,11 +72,11 @@ public class MoneyFlowEditorActivity extends AppCompatActivity {
     class SaveButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            if(mRecord == null){
+            if (mRecord == null) {
                 mRecord = new MoneyFlowRecord(
                         new BigDecimal(etValue.getText().toString()),
                         etDescription.getText().toString());
-            }else{
+            } else {
                 mRecord.setValue(new BigDecimal(etValue.getText().toString()));
                 mRecord.setDescription(etDescription.getText().toString());
             }
@@ -104,12 +105,12 @@ public class MoneyFlowEditorActivity extends AppCompatActivity {
         mBox = mStore.boxFor(MoneyFlowRecord.class);
 
         long id = 0;
-        if(getIntent().hasExtra(EXTRAS_ID)) {
+        if (getIntent().hasExtra(EXTRAS_ID)) {
             id = getIntent().getLongExtra(EXTRAS_ID, 0);
         }
 
         // TODO: mRecord shouldn't be null
-        if(id > 0){
+        if (id > 0) {
             mRecord = mBox.get(id);
         }
 
