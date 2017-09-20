@@ -21,6 +21,7 @@
             android:textSize="30sp"
             android:text="Balance"/>
         <TextView
+            android:id="@+id/tv_balance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"

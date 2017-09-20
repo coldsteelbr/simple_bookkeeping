@@ -13,13 +13,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import javax.inject.Inject;
 
 import io.objectbox.Box;
 import io.objectbox.BoxStore;
+import io.objectbox.query.Query;
 import ru.romanbrazhnikov.simplebookkeeping.R;
 import ru.romanbrazhnikov.simplebookkeeping.dagger.MyApp;
 import ru.romanbrazhnikov.simplebookkeeping.entities.MoneyFlowRecord;
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     //WIDGETS
     private Button bNewFlow;
+    private TextView tvBalance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,9 @@ public class MainActivity extends AppCompatActivity {
                 MoneyFlowEditorActivity.showActivity(MainActivity.this, null);
             }
         });
+
+        // Balance
+        tvBalance = findViewById(R.id.tv_balance);
     }
 
     @Override
@@ -70,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
+
+        // LIST
         // getting notes and setting adapter
         List<MoneyFlowRecord> notes = mMoneyFlowBox.getAll();
         if (mRecordAdapter == null) {
@@ -80,6 +89,18 @@ public class MainActivity extends AppCompatActivity {
             mRecordAdapter.notifyDataSetChanged();
         }
 
+        // BALANCE
+        // query all values
+        List<MoneyFlowRecord> recordsForBalance = mMoneyFlowBox.getAll();
+
+        BigDecimal balanceResult = BigDecimal.ZERO;
+
+        // calculate the balance (sum)
+        for (MoneyFlowRecord currentRecord:
+             recordsForBalance) {
+            balanceResult = balanceResult.add(currentRecord.getValue());
+        }
+        tvBalance.setText(balanceResult.toString());
     }
 
     class MoneyFlowViewHolder extends RecyclerView.ViewHolder
