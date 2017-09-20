@@ -10,20 +10,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.objectbox.Box;
 import io.objectbox.BoxStore;
+import io.objectbox.query.Query;
 import ru.romanbrazhnikov.simplebookkeeping.R;
 import ru.romanbrazhnikov.simplebookkeeping.dagger.MyApp;
 import ru.romanbrazhnikov.simplebookkeeping.entities.MoneyFlowRecord;
+import ru.romanbrazhnikov.simplebookkeeping.entities.MoneyFlowRecord_;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
     //WIDGETS
     private Button bNewFlow;
     private TextView tvBalance;
+    private RadioGroup rbgFilters;
+    private RadioButton rbToday;
+    private RadioButton rbMonth;
+    private RadioButton rbAllTime;
+    private DateRange mDateRange = new DateRange();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +78,17 @@ public class MainActivity extends AppCompatActivity {
 
         // Balance
         tvBalance = findViewById(R.id.tv_balance);
+
+        // Filter
+        rbgFilters = findViewById(R.id.rbg_filters);
+        rbToday = findViewById(R.id.rb_today);
+        rbMonth = findViewById(R.id.rb_month);
+        rbAllTime = findViewById(R.id.rb_all_time);
+
+        FilterButtonClicked filterClickListener = new FilterButtonClicked();
+        rbToday.setOnClickListener(filterClickListener);
+        rbMonth.setOnClickListener(filterClickListener);
+        rbAllTime.setOnClickListener(filterClickListener);
     }
 
     @Override
@@ -77,25 +100,26 @@ public class MainActivity extends AppCompatActivity {
     private void updateUI() {
 
         // LIST
-        // getting notes and setting adapter
-        List<MoneyFlowRecord> notes = mMoneyFlowBox.getAll();
+        // getting records and setting adapter
+        Query<MoneyFlowRecord> queryByDate
+                = mMoneyFlowBox.query()
+                .between(MoneyFlowRecord_.date, mDateRange.mFromDate, mDateRange.mToDate).build();
+
+        List<MoneyFlowRecord> filteredRecords = queryByDate.find();
         if (mRecordAdapter == null) {
-            mRecordAdapter = new MoneyFlowAdapter(notes);
+            mRecordAdapter = new MoneyFlowAdapter(filteredRecords);
             rvRecords.setAdapter(mRecordAdapter);
         } else {
-            mRecordAdapter.updateData(notes);
+            mRecordAdapter.updateData(filteredRecords);
             mRecordAdapter.notifyDataSetChanged();
         }
 
         // BALANCE
-        // query all values
-        List<MoneyFlowRecord> recordsForBalance = mMoneyFlowBox.getAll();
-
         BigDecimal balanceResult = BigDecimal.ZERO;
 
         // calculate the balance (sum)
         for (MoneyFlowRecord currentRecord :
-                recordsForBalance) {
+                filteredRecords) {
             balanceResult = balanceResult.add(currentRecord.getValue());
         }
         tvBalance.setText(balanceResult.toString());
@@ -195,5 +219,74 @@ public class MainActivity extends AppCompatActivity {
             mRecords.addAll(newList);
             this.notifyDataSetChanged();
         }
+    }
+
+    class FilterButtonClicked implements View.OnClickListener {
+
+        private void setTimeToBeginningOfDay(Calendar calendar) {
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+        }
+
+        private void setTimeToEndingOfDay(Calendar calendar) {
+            calendar.set(Calendar.HOUR_OF_DAY, 23);
+            calendar.set(Calendar.MINUTE, 59);
+            calendar.set(Calendar.SECOND, 59);
+            calendar.set(Calendar.MILLISECOND, 99);
+        }
+
+        @Override
+        public void onClick(View view) {
+            // not a radiobutton
+            if (!(view instanceof RadioButton)) {
+                return;
+            }
+
+            switch (rbgFilters.getCheckedRadioButtonId()) {
+                case R.id.rb_today: // TODAY
+                {
+                    Calendar calendar = GregorianCalendar.getInstance();
+                    calendar.setTime(new Date());
+                    setTimeToBeginningOfDay(calendar);
+                    mDateRange.mFromDate = calendar.getTime();
+                }
+                {
+                    Calendar calendar = GregorianCalendar.getInstance();
+                    calendar.setTime(new Date());
+                    setTimeToEndingOfDay(calendar);
+                    mDateRange.mToDate = calendar.getTime();
+                }
+                break;
+                case R.id.rb_month: // MONTH
+                {
+                    Calendar calendar = GregorianCalendar.getInstance();
+                    calendar.set(Calendar.DAY_OF_MONTH,
+                            calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+                    setTimeToBeginningOfDay(calendar);
+                    mDateRange.mFromDate = calendar.getTime();
+                }
+
+                {
+                    Calendar calendar = GregorianCalendar.getInstance();
+                    calendar.set(Calendar.DAY_OF_MONTH,
+                            calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+                    setTimeToBeginningOfDay(calendar);
+                    mDateRange.mToDate = calendar.getTime();
+                }
+                break;
+                case R.id.rb_all_time: // ALL TIME
+                    mDateRange.mFromDate = new Date(Long.MIN_VALUE);
+                    mDateRange.mToDate = new Date();
+                    break;
+            }
+            updateUI();
+        }
+    }
+
+    class DateRange {
+        Date mFromDate = new Date();
+        Date mToDate = new Date();
     }
 }
