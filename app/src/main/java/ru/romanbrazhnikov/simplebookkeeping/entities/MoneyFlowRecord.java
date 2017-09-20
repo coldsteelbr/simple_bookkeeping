@@ -1,6 +1,7 @@
 package ru.romanbrazhnikov.simplebookkeeping.entities;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import io.objectbox.annotation.Convert;
 import io.objectbox.annotation.Entity;
@@ -18,6 +19,7 @@ public class MoneyFlowRecord {
     @Convert(converter = ValueConverter.class, dbType = String.class)
     private BigDecimal value;
     private String description;
+    private Date date;
 
 
     /** Converts BigDecimal to String and back to be saved in and read of the ObjectBox
@@ -72,5 +74,13 @@ public class MoneyFlowRecord {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

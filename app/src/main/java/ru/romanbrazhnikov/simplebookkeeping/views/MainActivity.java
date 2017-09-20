@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         private List<MoneyFlowRecord> mRecords = new ArrayList<>();
 
         public MoneyFlowAdapter(List<MoneyFlowRecord> records) {
-            mRecords = records;
+            updateData(records);
         }
 
         @Override

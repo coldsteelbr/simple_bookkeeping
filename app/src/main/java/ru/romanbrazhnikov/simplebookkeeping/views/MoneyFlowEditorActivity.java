@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -81,6 +82,7 @@ public class MoneyFlowEditorActivity extends AppCompatActivity {
                 mRecord.setDescription(etDescription.getText().toString());
             }
 
+            mRecord.setDate(new Date());
             mBox.put(mRecord);
             mSelf.finish();
         }

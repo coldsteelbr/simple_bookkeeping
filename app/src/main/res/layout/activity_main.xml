@@ -30,6 +30,31 @@
             android:text="0.00 rub"/>
     </LinearLayout>
 
+    <!-- Date filters -->
+    <RadioGroup
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+        <RadioButton
+            android:id="@+id/rb_today"
+            android:checked="true"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Today"/>
+        <RadioButton
+            android:id="@+id/rb_month"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Month"/>
+        <RadioButton
+            android:id="@+id/rb_all_time"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="All time"/>
+    </RadioGroup>
     <!-- LIST OF RECORDS -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_records"
