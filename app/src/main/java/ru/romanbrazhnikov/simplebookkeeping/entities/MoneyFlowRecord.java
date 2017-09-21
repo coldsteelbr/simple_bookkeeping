@@ -1,11 +1,13 @@
 package ru.romanbrazhnikov.simplebookkeeping.entities;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import io.objectbox.annotation.Convert;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.annotation.Transient;
 import io.objectbox.converter.PropertyConverter;
 
 /**
@@ -20,6 +22,13 @@ public class MoneyFlowRecord {
     private BigDecimal value;
     private String description;
     private Date date;
+
+    @Transient
+    SimpleDateFormat mSdf = new SimpleDateFormat("dd.MM.yyyy");
+
+    public String getFormattedDate() {
+        return mSdf.format(date);
+    }
 
 
     /** Converts BigDecimal to String and back to be saved in and read of the ObjectBox

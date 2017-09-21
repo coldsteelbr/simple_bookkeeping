@@ -15,6 +15,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -131,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         private long mId = 0;
         private TextView tvValue;
         private TextView tvDescription;
+        private TextView tvDate;
 
         public MoneyFlowViewHolder(View itemView) {
             super(itemView);
@@ -138,12 +141,14 @@ public class MainActivity extends AppCompatActivity {
             itemView.setOnLongClickListener(this);
             tvValue = itemView.findViewById(R.id.tv_value);
             tvDescription = itemView.findViewById(R.id.tv_description);
+            tvDate = itemView.findViewById(R.id.tv_date);
         }
 
         public void bindRecord(MoneyFlowRecord record) {
             mId = record.getId();
             tvValue.setText(record.getValueAsString());
             tvDescription.setText(record.getDescription());
+            tvDate.setText(record.getFormattedDate());
         }
 
         @Override
@@ -245,6 +250,5 @@ public class MainActivity extends AppCompatActivity {
             updateUI();
         }
     }
-
 
 }
