@@ -17,9 +17,6 @@ import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,6 +28,8 @@ import ru.romanbrazhnikov.simplebookkeeping.R;
 import ru.romanbrazhnikov.simplebookkeeping.dagger.MyApp;
 import ru.romanbrazhnikov.simplebookkeeping.entities.MoneyFlowRecord;
 import ru.romanbrazhnikov.simplebookkeeping.entities.MoneyFlowRecord_;
+import ru.romanbrazhnikov.simplebookkeeping.structs.DateRange;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioButton rbToday;
     private RadioButton rbMonth;
     private RadioButton rbAllTime;
-    private DateRange mDateRange = new DateRange();
+    private DateRange mDateRange = new DateRange(DateRange.DateType.DAY);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         // getting records and setting adapter
         Query<MoneyFlowRecord> queryByDate
                 = mMoneyFlowBox.query()
-                .between(MoneyFlowRecord_.date, mDateRange.mFromDate, mDateRange.mToDate).build();
+                .between(MoneyFlowRecord_.date, mDateRange.getFromDate(), mDateRange.getToDate()).build();
 
         List<MoneyFlowRecord> filteredRecords = queryByDate.find();
         if (mRecordAdapter == null) {
@@ -221,21 +220,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     class FilterButtonClicked implements View.OnClickListener {
-
-        private void setTimeToBeginningOfDay(Calendar calendar) {
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-        }
-
-        private void setTimeToEndingOfDay(Calendar calendar) {
-            calendar.set(Calendar.HOUR_OF_DAY, 23);
-            calendar.set(Calendar.MINUTE, 59);
-            calendar.set(Calendar.SECOND, 59);
-            calendar.set(Calendar.MILLISECOND, 99);
-        }
 
         @Override
         public void onClick(View view) {
@@ -245,48 +231,20 @@ public class MainActivity extends AppCompatActivity {
             }
 
             switch (rbgFilters.getCheckedRadioButtonId()) {
-                case R.id.rb_today: // TODAY
-                {
-                    Calendar calendar = GregorianCalendar.getInstance();
-                    calendar.setTime(new Date());
-                    setTimeToBeginningOfDay(calendar);
-                    mDateRange.mFromDate = calendar.getTime();
-                }
-                {
-                    Calendar calendar = GregorianCalendar.getInstance();
-                    calendar.setTime(new Date());
-                    setTimeToEndingOfDay(calendar);
-                    mDateRange.mToDate = calendar.getTime();
-                }
-                break;
-                case R.id.rb_month: // MONTH
-                {
-                    Calendar calendar = GregorianCalendar.getInstance();
-                    calendar.set(Calendar.DAY_OF_MONTH,
-                            calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-                    setTimeToBeginningOfDay(calendar);
-                    mDateRange.mFromDate = calendar.getTime();
-                }
-
-                {
-                    Calendar calendar = GregorianCalendar.getInstance();
-                    calendar.set(Calendar.DAY_OF_MONTH,
-                            calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-                    setTimeToBeginningOfDay(calendar);
-                    mDateRange.mToDate = calendar.getTime();
-                }
-                break;
-                case R.id.rb_all_time: // ALL TIME
-                    mDateRange.mFromDate = new Date(Long.MIN_VALUE);
-                    mDateRange.mToDate = new Date();
+                // TODO: create the range before
+                case R.id.rb_today:
+                    mDateRange = new DateRange(DateRange.DateType.DAY);
+                    break;
+                case R.id.rb_month:
+                    mDateRange = new DateRange(DateRange.DateType.MONTH);
+                    break;
+                case R.id.rb_all_time:
+                    mDateRange = new DateRange(DateRange.DateType.ALL_TIME);
                     break;
             }
             updateUI();
         }
     }
 
-    class DateRange {
-        Date mFromDate = new Date();
-        Date mToDate = new Date();
-    }
+
 }
