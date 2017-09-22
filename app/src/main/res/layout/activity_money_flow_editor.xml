@@ -12,7 +12,7 @@
         android:id="@+id/et_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal|numberSigned"
+        android:inputType="numberDecimal"
         android:hint="0."/>
 
     <!-- INCOME/EXPENSE switcher -->
@@ -37,6 +37,16 @@
             android:text="Expense"
             />
     </RadioGroup>
+
+    <!-- CUSTOM DATE -->
+    <EditText
+        android:id="@+id/tv_date_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:inputType="none"/>
+
 
     <EditText
         android:id="@+id/et_description"

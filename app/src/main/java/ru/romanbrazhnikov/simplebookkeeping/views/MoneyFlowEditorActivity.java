@@ -1,5 +1,7 @@
 package ru.romanbrazhnikov.simplebookkeeping.views;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -19,14 +24,18 @@ import ru.romanbrazhnikov.simplebookkeeping.R;
 import ru.romanbrazhnikov.simplebookkeeping.dagger.MyApp;
 import ru.romanbrazhnikov.simplebookkeeping.entities.MoneyFlowRecord;
 
-public class MoneyFlowEditorActivity extends AppCompatActivity {
+public class MoneyFlowEditorActivity extends AppCompatActivity
+                    implements SelectedDateInterface
+{
 
+    private static final String DATE_PICKER_DIALOG = "DATE_PICKER_DIALOG";
     private static String EXTRAS_ID = "EXTRAS_ID";
 
     MoneyFlowEditorActivity mSelf = this;
     @Inject
     BoxStore mStore;
     private Box<MoneyFlowRecord> mBox;
+    // TODO: shouldn't be null
     private MoneyFlowRecord mRecord = null;
 
     // Widgets
@@ -34,7 +43,10 @@ public class MoneyFlowEditorActivity extends AppCompatActivity {
     private Button bCancel;
     private EditText etValue;
     private EditText etDescription;
+    private EditText etDate;
+    private long mDateInMilliseconds;
 
+    private DateFormat mDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
     public static void showActivity(Context context, Long id) {
         Intent intent = new Intent(context, MoneyFlowEditorActivity.class);
@@ -63,7 +75,35 @@ public class MoneyFlowEditorActivity extends AppCompatActivity {
         bSave.setOnClickListener(new SaveButtonClickListener());
         bCancel = findViewById(R.id.b_cancel);
         bCancel.setOnClickListener(new CancelButtonClickListener());
+
+        // Date text
+        etDate = findViewById(R.id.tv_date_picker);
+        etDate.setText(mDateFormat.format(mRecord.getDate()));
+        etDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getFragmentManager();
+                Date date = null;
+                try {
+                    date = mDateFormat.parse(etDate.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (date == null) {
+                    date = new Date();
+                }
+                DatePickerFragment dialog = DatePickerFragment.getInstance(date);
+                dialog.show(fm, DATE_PICKER_DIALOG);
+            }
+        });
+
     }
+
+    @Override
+    public void onDateSet(Date date) {
+        etDate.setText(mDateFormat.format(date));
+    }
+
 
     //
     //  EVENT LISTENERS
@@ -82,6 +122,7 @@ public class MoneyFlowEditorActivity extends AppCompatActivity {
                 mRecord.setDescription(etDescription.getText().toString());
             }
 
+            // TODO: working with date
             mRecord.setDate(new Date());
             mBox.put(mRecord);
             mSelf.finish();
@@ -114,11 +155,12 @@ public class MoneyFlowEditorActivity extends AppCompatActivity {
         // TODO: mRecord shouldn't be null
         if (id > 0) {
             mRecord = mBox.get(id);
+        } else {
+            mRecord = new MoneyFlowRecord();
         }
 
 
         initWidgets();
     }
-
 
 }
