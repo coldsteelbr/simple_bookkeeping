@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -42,6 +44,7 @@ public class MoneyFlowEditorActivity extends AppCompatActivity
     private EditText etValue;
     private EditText etDescription;
     private EditText etDate;
+    private RadioGroup rgFlows;
     private long mDateInMilliseconds;
 
     private DateFormat mDateFormat = new SimpleDateFormat("dd.MM.yyyy");
@@ -95,6 +98,9 @@ public class MoneyFlowEditorActivity extends AppCompatActivity
             }
         });
 
+
+        // radio group flows
+        rgFlows = findViewById(R.id.rg_flows);
     }
 
     @Override
@@ -119,6 +125,14 @@ public class MoneyFlowEditorActivity extends AppCompatActivity
             } else {
                 mRecord.setValue(new BigDecimal(etValue.getText().toString()));
                 mRecord.setDescription(etDescription.getText().toString());
+            }
+
+            switch (rgFlows.getCheckedRadioButtonId()){
+                case R.id.rb_income:
+                    break;
+                case R.id.rb_expense:
+                    mRecord.setValue(mRecord.getValue().negate());
+                    break;
             }
 
             // TODO: working with date
