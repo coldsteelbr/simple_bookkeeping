@@ -22,26 +22,10 @@ public class MoneyFlowRecord {
     private BigDecimal value = BigDecimal.ZERO;
     private String description;
     private Date date = new Date();
-    @Convert(converter = FlowConverter.class, dbType = Integer.class)
-    private FlowDirection flowDirection;
 
     @Transient
     SimpleDateFormat mSdf = new SimpleDateFormat("dd.MM.yyyy");
 
-    public enum FlowDirection{
-        INCOME(0),
-        EXPENSE(1);
-
-        private final int mValue;
-
-        FlowDirection(int value){
-            mValue = value;
-        }
-
-        public int getValue(){
-            return mValue;
-        }
-    }
 
     public String getFormattedDate() {
         return mSdf.format(date);
@@ -63,18 +47,7 @@ public class MoneyFlowRecord {
         }
     }
 
-    public static class FlowConverter implements PropertyConverter<FlowDirection, Integer>{
 
-        @Override
-        public FlowDirection convertToEntityProperty(Integer databaseValue) {
-            return FlowDirection.values()[databaseValue];
-        }
-
-        @Override
-        public Integer convertToDatabaseValue(FlowDirection entityProperty) {
-            return entityProperty.getValue();
-        }
-    }
 
     // Constructors
     public MoneyFlowRecord() {
@@ -123,11 +96,4 @@ public class MoneyFlowRecord {
         this.date = date;
     }
 
-    public FlowDirection getFlowDirection() {
-        return flowDirection;
-    }
-
-    public void setFlowDirection(FlowDirection flowDirection) {
-        this.flowDirection = flowDirection;
-    }
 }

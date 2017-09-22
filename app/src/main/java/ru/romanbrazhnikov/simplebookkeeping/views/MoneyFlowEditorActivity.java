@@ -1,6 +1,5 @@
 package ru.romanbrazhnikov.simplebookkeeping.views;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
@@ -25,8 +24,7 @@ import ru.romanbrazhnikov.simplebookkeeping.dagger.MyApp;
 import ru.romanbrazhnikov.simplebookkeeping.entities.MoneyFlowRecord;
 
 public class MoneyFlowEditorActivity extends AppCompatActivity
-                    implements SelectedDateInterface
-{
+        implements SelectedDateInterface {
 
     private static final String DATE_PICKER_DIALOG = "DATE_PICKER_DIALOG";
     private static String EXTRAS_ID = "EXTRAS_ID";
@@ -101,6 +99,7 @@ public class MoneyFlowEditorActivity extends AppCompatActivity
 
     @Override
     public void onDateSet(Date date) {
+        mDateInMilliseconds = date.getTime();
         etDate.setText(mDateFormat.format(date));
     }
 
@@ -123,7 +122,7 @@ public class MoneyFlowEditorActivity extends AppCompatActivity
             }
 
             // TODO: working with date
-            mRecord.setDate(new Date());
+            mRecord.setDate(new Date(mDateInMilliseconds));
             mBox.put(mRecord);
             mSelf.finish();
         }
