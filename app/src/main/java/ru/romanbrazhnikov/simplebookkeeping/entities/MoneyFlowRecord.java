@@ -1,13 +1,11 @@
 package ru.romanbrazhnikov.simplebookkeeping.entities;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import io.objectbox.annotation.Convert;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
-import io.objectbox.annotation.Transient;
 import io.objectbox.converter.PropertyConverter;
 
 /**
@@ -23,6 +21,7 @@ public class MoneyFlowRecord {
     private String description;
     private Date date = new Date();
 
+/*  TODO: REMOVE THIS CODE AT ALL, OR INJECT THE DATEFORMAT DEPENDENCY
     @Transient
     SimpleDateFormat mSdf = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -30,11 +29,12 @@ public class MoneyFlowRecord {
     public String getFormattedDate() {
         return mSdf.format(date);
     }
+*/
 
-
-    /** Converts BigDecimal to String and back to be saved in and read of the ObjectBox
-     * */
-    public static class ValueConverter implements PropertyConverter<BigDecimal, String>{
+    /**
+     * Converts BigDecimal to String and back to be saved in and read of the ObjectBox
+     */
+    public static class ValueConverter implements PropertyConverter<BigDecimal, String> {
 
         @Override
         public BigDecimal convertToEntityProperty(String databaseValue) {
@@ -48,7 +48,6 @@ public class MoneyFlowRecord {
     }
 
 
-
     // Constructors
     public MoneyFlowRecord() {
     }
@@ -59,7 +58,7 @@ public class MoneyFlowRecord {
     }
 
     // Custom properties
-    public String getValueAsString(){
+    public String getValueAsString() {
         return value.toString();
     }
 

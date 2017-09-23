@@ -146,7 +146,9 @@ public class MainActivity extends AppCompatActivity {
             mId = record.getId();
             tvValue.setText(record.getValueAsString());
             tvDescription.setText(record.getDescription());
-            tvDate.setText(record.getFormattedDate());
+            // TODO: reimplement with formatted date
+            //tvDate.setText(record.getFormattedDate());
+            tvDate.setText(record.getDate().toString());
         }
 
         @Override
