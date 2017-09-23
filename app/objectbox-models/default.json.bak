@@ -1,0 +1,42 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:1929341490220559368",
+      "lastPropertyId": "6:6352299271858448981",
+      "name": "MoneyFlowRecord",
+      "properties": [
+        {
+          "id": "4:7646678195403743900",
+          "name": "id"
+        },
+        {
+          "id": "5:4642403710424644988",
+          "name": "value"
+        },
+        {
+          "id": "6:6352299271858448981",
+          "name": "description"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "1:1929341490220559368",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    6434252708927342949,
+    8404462784839470361,
+    816623174716646252
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}
