@@ -128,6 +128,7 @@ public class MoneyFlowEditorActivity extends AppCompatActivity
         rgFlows = findViewById(R.id.rg_flows);
         rbIncome = findViewById(R.id.rb_income);
         rbExpense = findViewById(R.id.rb_expense);
+
         // setting checked an appropriate radio button
         switch (mScreenModel.getFlow()) {
 

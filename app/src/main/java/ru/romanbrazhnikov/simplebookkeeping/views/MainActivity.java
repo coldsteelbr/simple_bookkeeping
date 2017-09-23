@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private Box<MoneyFlowRecord> mMoneyFlowBox;
     private RecyclerView rvRecords;
     private MoneyFlowAdapter mRecordAdapter;
+    private DateFormat mDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
     //WIDGETS
     private Button bNewFlow;
@@ -146,9 +149,9 @@ public class MainActivity extends AppCompatActivity {
             mId = record.getId();
             tvValue.setText(record.getValueAsString());
             tvDescription.setText(record.getDescription());
-            // TODO: reimplement with formatted date
+            // TODO: reimplement with formatted date, SCREEN MODEL
             //tvDate.setText(record.getFormattedDate());
-            tvDate.setText(record.getDate().toString());
+            tvDate.setText(mDateFormat.format(record.getDate()));
         }
 
         @Override
